@@ -15,7 +15,7 @@
     "ts:watch": "tsc --watch",
     "ts:build": "tsc",
     "test": "nodemon ./main.js /unlink/folder tests",
-    "prepublishOnly": ""
+    "prepublishOnly": "npm run ts:build"
   },
   "devDependencies": {
     "@types/node": "^20.4.5",
