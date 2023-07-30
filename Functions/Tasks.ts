@@ -165,9 +165,15 @@ export async function loadCommandHandler(ownClt: OwnClt) {
                     // check if object
                     if (
                         typeof findSubCommand === "object" &&
-                        findSubCommand.hasOwnProperty(lastSubCommand)
+                        (findSubCommand.hasOwnProperty("default") ||
+                            findSubCommand.hasOwnProperty(lastSubCommand))
                     ) {
-                        const defaultSubCommand = findSubCommand[lastSubCommand];
+                        const defaultSubCommand =
+                            findSubCommand[
+                                findSubCommand.hasOwnProperty("default")
+                                    ? "default"
+                                    : lastSubCommand
+                            ];
 
                         if (typeof defaultSubCommand !== "function") {
                             return log.errorAndExit(

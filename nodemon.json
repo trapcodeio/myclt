@@ -1,6 +1,4 @@
 {
   "verbose": false,
-  "watch": [
-    "build"
-  ]
+  "ignore": ["node_modules", ".ownclt"]
 }

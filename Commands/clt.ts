@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import type { OwnCltMapFile } from "../Types/Custom";
 import { defineCommands } from "../Functions/Helpers";
+import list from "./clt/list";
 
 export default defineCommands({
     context(ctx) {
@@ -139,5 +140,9 @@ export default defineCommands({
 
             self("unlink/unlink", map.namespace);
         }
-    }
+    },
+
+    list,
+    // alias
+    ls: list
 });
