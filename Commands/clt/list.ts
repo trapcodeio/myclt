@@ -3,20 +3,6 @@ import { OwnCltDbCommandData } from "../../Types/Custom";
 import chalk = require("chalk");
 import type OwnClt from "../../Classes/OwnClt";
 
-function getCommands(ownclt: OwnClt) {
-    const commands: Record<string, string> = {};
-    const dbCommands = ownclt.db.get<Record<string, OwnCltDbCommandData>>("commands");
-
-    for (const [namespace, map] of Object.entries(dbCommands)) {
-        // loop through each command
-        for (const [command, { desc }] of Object.entries(map.commands)) {
-            commands[namespace === "clt" ? `/${command}` : `${namespace}/${command}`] = desc;
-        }
-    }
-
-    return commands;
-}
-
 export default defineCommands({
     /**
      * Default Command for:
@@ -80,3 +66,21 @@ export default defineCommands({
         log.emptyLine();
     }
 });
+
+/**
+ * Get Command's Object from ownclt db
+ * @param ownclt
+ */
+function getCommands(ownclt: OwnClt) {
+    const commands: Record<string, string> = {};
+    const dbCommands = ownclt.db.get<Record<string, OwnCltDbCommandData>>("commands");
+
+    for (const [namespace, map] of Object.entries(dbCommands)) {
+        // loop through each command
+        for (const [command, { desc }] of Object.entries(map.commands)) {
+            commands[namespace === "clt" ? `/${command}` : `${namespace}/${command}`] = desc;
+        }
+    }
+
+    return commands;
+}
