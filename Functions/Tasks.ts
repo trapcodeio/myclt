@@ -121,7 +121,7 @@ export async function loadCommandHandler(self: OwnClt) {
 
     try {
         Commands = require(Path.resolve(commandHandler));
-    } catch (err) {
+    } catch (err: any) {
         return log.errorAndExit(err.message, err.stack);
     }
 

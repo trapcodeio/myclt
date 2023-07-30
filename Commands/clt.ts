@@ -2,16 +2,11 @@ import { OwnCltMapFile } from "../Types/Custom";
 import fs = require("fs");
 import path = require("path");
 import { defineCommands } from "../Functions/Helpers";
-import { errorAndExit, info, successAndExit, warningAndExit } from "../Functions/Loggers";
-import { exec } from "child_process";
+import { errorAndExit, info, log, successAndExit, warningAndExit } from "../Functions/Loggers";
 
 export = defineCommands({
-    webstorm() {
-        const command = ["open", "-na", '"WebStorm.app"', "--args", "./"].join(" ");
-
-        info(command);
-
-        exec(command);
+    context(ctx) {
+        console.dir(JSON.parse(JSON.stringify(ctx, null, 2)), { depth: 10 });
     },
 
     /**
