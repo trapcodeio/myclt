@@ -1,0 +1,9 @@
+{
+  "namespace": "hello",
+  "file": "./hello.js",
+  "commands": {
+    "world": {
+      "desc": "Says a simple hello world!"
+    }
+  }
+}

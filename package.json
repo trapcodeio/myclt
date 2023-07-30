@@ -1,0 +1,31 @@
+{
+  "name": "ownclt",
+  "version": "0.2.0",
+  "description": "Own Command Line Tool",
+  "main": "build/main.js",
+  "repository": "https://github.com/ownclt/ownclt",
+  "author": "ownclt",
+  "license": "MIT",
+  "private": false,
+  "bin": {
+    "clt": "./bin/ownclt.js",
+    "ownclt": "./bin/ownclt.js"
+  },
+  "scripts": {
+    "ts:watch": "tsc --watch",
+    "ts:build": "tsc",
+    "test": "nodemon ./main.js /unlink/folder tests",
+    "prepublishOnly": ""
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "jsonpointer": "^5.0.1",
+    "object-collection": "^3.0.1",
+    "ora": "^5.4.1"
+  }
+}

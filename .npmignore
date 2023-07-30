@@ -1,0 +1,17 @@
+.idea
+.vscode
+.ownclt
+node_modules
+yarn.lock
+tests
+
+
+# ignore the .ts files
+*.ts
+# include the .d.ts files
+!*.d.ts
+
+.prettierrc
+bash.sh
+nodemon.json
+roadmap.md
