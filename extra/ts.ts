@@ -3,7 +3,7 @@ import fs = require("fs");
 import { spawn } from "child_process";
 import ora from "ora";
 
-export = <OwnCltCommandsObject>{
+export default <OwnCltCommandsObject>{
     /**
      * runSubCommand
      */

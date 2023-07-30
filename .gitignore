@@ -6,3 +6,4 @@ build
 # exclude build files
 *.js
 *.d.ts
+extra

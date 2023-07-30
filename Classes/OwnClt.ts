@@ -4,9 +4,9 @@
  * Holds all the components ownclt needs to run any command.
  */
 import { OwnCltConfig } from "../Types/Custom";
-import Path = require("path");
+import Path from "path";
 import { installedOrInstall, loadCommandHandler, processCliQuery } from "../Functions/Tasks";
-import OwnCltDatabase = require("./OwnCltDatabase");
+import OwnCltDatabase from "./OwnCltDatabase";
 import { Obj } from "object-collection/exports";
 
 class OwnClt {
@@ -92,4 +92,4 @@ class OwnClt {
     // getDb(){}
 }
 
-export = OwnClt;
+export default OwnClt;

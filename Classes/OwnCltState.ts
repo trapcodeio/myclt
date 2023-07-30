@@ -4,4 +4,4 @@ class OwnCltState extends ObjectCollection {
     save() {}
 }
 
-export = OwnCltState;
+export default OwnCltState;

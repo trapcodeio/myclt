@@ -1,5 +1,5 @@
 import ObjectCollection = require("object-collection");
-import fs from "fs";
+import * as fs from "fs";
 
 class OwnCltDatabase extends ObjectCollection {
     public dbPath: string;
@@ -19,4 +19,4 @@ class OwnCltDatabase extends ObjectCollection {
     }
 }
 
-export = OwnCltDatabase;
+export default OwnCltDatabase;

@@ -2,7 +2,7 @@ import { OwnCltCommandFnContext, OwnCltCommandsObject } from "../Types/Custom";
 import path from "path";
 import fs from "fs";
 
-export = <OwnCltCommandsObject>{
+export default <OwnCltCommandsObject>{
     /**
      * FixMongoEnv
      * This commands replaces all local path in env to docker supported url.

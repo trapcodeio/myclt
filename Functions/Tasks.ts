@@ -1,7 +1,7 @@
 import OwnClt from "../Classes/OwnClt";
-import fs = require("fs");
-import Path = require("path");
-import jsonpointer = require("jsonpointer");
+import * as fs from "fs";
+import * as Path from "path";
+import jsonpointer from "jsonpointer";
 import * as log from "./Loggers";
 
 import FactoryDb from "../Factory/db";

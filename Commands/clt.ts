@@ -1,10 +1,10 @@
 import { OwnCltMapFile } from "../Types/Custom";
-import fs = require("fs");
-import path = require("path");
+import * as fs from "fs";
+import * as path from "path";
 import { defineCommands } from "../Functions/Helpers";
-import { errorAndExit, info, log, successAndExit, warningAndExit } from "../Functions/Loggers";
+import { errorAndExit, successAndExit, warningAndExit } from "../Functions/Loggers";
 
-export = defineCommands({
+export default defineCommands({
     context(ctx) {
         console.dir(JSON.parse(JSON.stringify(ctx, null, 2)), { depth: 10 });
     },
@@ -13,7 +13,6 @@ export = defineCommands({
      * Link Command
      * This command links the current working directory to ownclt commands.
      * @param args - Args received!
-     * @param log - Log Functions
      */
     link({ command, ownclt, state, args: [folder, as] }) {
         // Exit if no folder
