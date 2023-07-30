@@ -5,7 +5,12 @@ import jsonpointer from "jsonpointer";
 import * as log from "./Loggers";
 
 import FactoryDb from "../Factory/db";
-import { OwnCltCommandFn, OwnCltCommandFnContext, OwnCltCommandsObject } from "../Types/Custom";
+import {
+    OwnCltCommandFn,
+    OwnCltCommandFnContext,
+    OwnCltCommandsObject,
+    OwnCltMapFile
+} from "../Types/Custom";
 import OwnCltState from "../Classes/OwnCltState";
 import { Obj } from "object-collection/exports";
 
@@ -55,7 +60,7 @@ export function installedOrInstall(self: OwnClt) {
     if (!hasCltDb) {
         const factoryDb = FactoryDb();
         try {
-            fs.writeFileSync(cltDatabase, JSON.stringify(factoryDb, null, 2));
+            fs.writeFileSync(cltDatabase, JSON.stringify(factoryDb));
         } catch (e) {
             return log.errorAndExit(`Failed to create {db.json} folder in ${cltFolder}`, e);
         }
@@ -80,9 +85,9 @@ export function processCliQuery(self: OwnClt) {
     // E.g `clt/link/this` where `clt` is namespace
     // while ['link', 'this'] are subCommands
     const [namespace, ...subCommands] = command.split("/");
-    const commandHandler = commands.get(namespace);
+    const commandMap = commands.get<OwnCltMapFile>(namespace);
 
-    if (!commandHandler) {
+    if (!commandMap) {
         return log.warningAndExit(`Command "${command}" does not exists.`);
     }
 
@@ -90,7 +95,7 @@ export function processCliQuery(self: OwnClt) {
         args,
         command,
         subCommands,
-        commandHandler
+        commandHandler: commandMap.file
     };
 
     /**
@@ -101,11 +106,11 @@ export function processCliQuery(self: OwnClt) {
 
 /**
  * Loads the Handler file of a command
- * @param self
+ * @param ownClt
  */
-export async function loadCommandHandler(self: OwnClt) {
+export async function loadCommandHandler(ownClt: OwnClt) {
     // Throw error if instance has no query
-    if (!self.query) {
+    if (!ownClt.query) {
         throw new Error(
             `No query in ownclt instance, call processCliQuery() first before loadCommandHandler()`
         );
@@ -115,24 +120,29 @@ export async function loadCommandHandler(self: OwnClt) {
     const cwd = process.cwd();
 
     // Destruct the needful
-    const { commandHandler, subCommands, command } = self.query;
+    const { commandHandler, subCommands, command } = ownClt.query;
 
     let Commands: OwnCltCommandsObject = {};
 
     try {
         Commands = require(Path.resolve(commandHandler));
+
+        // check if it is default export
+        if (Commands.default) {
+            Commands = Commands.default as OwnCltCommandsObject;
+        }
     } catch (err: any) {
         return log.errorAndExit(err.message, err.stack);
     }
 
     if (typeof Commands === "object") {
-        // if has subcommands
+        // if it has subcommands
         if (!subCommands.length) {
             return log.errorAndExit(`Command "${command}" is incomplete, requires subCommands.`);
         }
 
         /**
-         * check if first subcommand exists.
+         * check if the first subcommand exists.
          */
         const mainSubCommandKey = subCommands[0];
         if (!Commands.hasOwnProperty(mainSubCommandKey)) {
@@ -179,9 +189,9 @@ export async function loadCommandHandler(self: OwnClt) {
 
         // Make Command Handler Context Data
         const data: OwnCltCommandFnContext = {
-            args: self.query.args,
-            command: self.query.command,
-            subCommands: self.query.subCommands,
+            args: ownClt.query.args,
+            command: ownClt.query.command,
+            subCommands: ownClt.query.subCommands,
             state: new OwnCltState(),
             log,
             paths: {
@@ -192,7 +202,7 @@ export async function loadCommandHandler(self: OwnClt) {
             },
             self: undefined as any,
             fromSelf: false,
-            ownclt: self
+            ownclt: () => ownClt
         };
 
         // Setup self function.

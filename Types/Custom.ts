@@ -18,13 +18,17 @@ export type OwnCltCommandFnContext = {
     state: OwnCltState;
     self: (name: string, args?: any | any[]) => any;
     fromSelf: boolean;
-    ownclt: OwnClt;
+    ownclt: () => OwnClt;
 };
 
 export type OwnCltMapFile = {
     namespace: string;
     file: string;
     commands: Record<string, { desc: string }>;
+};
+
+export type OwnCltDbCommandData = OwnCltMapFile & {
+    mapFile?: string;
 };
 
 export type OwnCltCommandFn = (ctx: OwnCltCommandFnContext) => any;
