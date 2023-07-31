@@ -10,7 +10,7 @@ import {
     OwnCltCommandFnContext,
     OwnCltCommandsObject,
     OwnCltMapFile
-} from "../Types/Custom";
+} from "../types/Custom";
 import OwnCltState from "../classes/OwnCltState";
 import { Obj } from "object-collection/exports";
 

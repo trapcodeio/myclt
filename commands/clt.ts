@@ -1,10 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { OwnCltDbCommandData, OwnCltMapFile } from "../Types/Custom";
+import type { OwnCltMapFile } from "../types/Custom";
 import { defineCommands } from "../functions/Helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
-import remember from "./clt/remember";
 
 export default defineCommands({
     context(ctx) {
@@ -263,7 +262,5 @@ export default defineCommands({
         }
     },
 
-    list,
-
-    ...remember
+    list
 });

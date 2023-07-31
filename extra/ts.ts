@@ -1,4 +1,4 @@
-import { OwnCltCommandsObject } from "../Types/Custom";
+import { OwnCltCommandsObject } from "../types/Custom";
 import fs = require("fs");
 import { spawn } from "child_process";
 import ora = require("ora");

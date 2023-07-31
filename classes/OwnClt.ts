@@ -3,7 +3,7 @@
  *
  * Holds all the components ownclt needs to run any command.
  */
-import { OwnCltConfig } from "../Types/Custom";
+import { OwnCltConfig } from "../types/Custom";
 import Path from "path";
 import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/Tasks";
 import OwnCltDatabase from "./OwnCltDatabase";
