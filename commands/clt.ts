@@ -4,6 +4,7 @@ import type { OwnCltDbCommandData, OwnCltMapFile } from "../Types/Custom";
 import { defineCommands } from "../functions/Helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
+import remember from "./clt/remember";
 
 export default defineCommands({
     context(ctx) {
@@ -263,6 +264,6 @@ export default defineCommands({
     },
 
     list,
-    // alias
-    ls: list
+
+    ...remember
 });
