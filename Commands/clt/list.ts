@@ -26,15 +26,21 @@ export default defineCommands({
         for (const key of ["[Command]", ...Object.keys(commands)])
             longestKeyLength = Math.max(longestKeyLength, key.length);
 
+        // add 5 to the longest key length to add some space
         longestKeyLength += 5;
         const pipe = chalk.dim("|");
 
+        // Print the header
         console.log(
             `[Command]${" ".repeat(longestKeyLength - "[Command]".length)} ${pipe} [Description]`
         );
 
+        // Print the separator
         console.log(chalk.dim("-".repeat(50 + longestKeyLength)));
 
+        // Loop through all commands
+        // if is search, only print the commands that match the search query
+        // else print all commands
         let results = 0;
         for (const [key, desc] of Object.entries(commands)) {
             if (search) {
@@ -50,6 +56,7 @@ export default defineCommands({
             results++;
         }
 
+        // Print the separator
         console.log(chalk.dim("-".repeat(50 + longestKeyLength)));
 
         if (search) {
