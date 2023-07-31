@@ -125,6 +125,12 @@ export async function loadCommandHandler(ownClt: OwnClt) {
     let Commands: OwnCltCommandsObject = {};
 
     try {
+        // check if commandHandler is a ts file
+        if (commandHandler.endsWith(".ts")) {
+            // register ts-node
+            require("ts-node/register");
+        }
+
         Commands = require(Path.resolve(commandHandler));
 
         // check if it is default export

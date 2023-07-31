@@ -1,0 +1,9 @@
+{
+  "namespace": "hello_ts",
+  "file": "./hello.ts",
+  "commands": {
+    "world": {
+      "desc": "Says a simple hello world!"
+    }
+  }
+}

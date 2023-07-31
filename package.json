@@ -19,13 +19,14 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.5",
-    "nodemon": "^3.0.1",
-    "typescript": "^5.1.6"
+    "nodemon": "^3.0.1"
   },
   "dependencies": {
     "chalk": "^4.1.0",
     "jsonpointer": "^5.0.1",
     "object-collection": "^3.0.1",
-    "ora": "^5.4.1"
+    "ora": "^5.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
