@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { OwnCltMapFile } from "../Types/Custom";
+import type { OwnCltDbCommandData, OwnCltMapFile } from "../Types/Custom";
 import { defineCommands } from "../functions/Helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
@@ -238,19 +238,27 @@ export default defineCommands({
             // Get mapFile
             const map: OwnCltMapFile = state.get("mapFile");
 
-            const findKeyByFile = ownclt()
+            const filter = ownclt()
                 .db.path("commands")
                 .pickBy((d: any) => {
-                    return d === map.file;
+                    return d.file === map.file;
                 });
 
-            console.log(findKeyByFile);
-            log.errorAndExit("stop");
+            // check if the filter is empty
+            if (Object.keys(filter).length === 0) {
+                return log.errorAndExit(`No command with namespace: "${map.namespace}" found.`);
+            }
 
-            if (!findKeyByFile)
-                return log.errorAndExit(`Namespace "${map.namespace}" is not linked.`);
+            const namespace = Object.keys(filter)[0];
 
-            self("unlink/unlink", map.namespace);
+            if (namespace !== map.namespace) {
+                log.info(`Found command: "${map.namespace}" as "${namespace}"`);
+            } else {
+                log.info(`Found command: "${map.namespace}"`);
+            }
+
+            // call unlink
+            self("unlink", namespace);
         }
     },
 
