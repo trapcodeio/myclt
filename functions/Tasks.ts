@@ -20,7 +20,7 @@ import { Obj } from "object-collection/exports";
  * @param path - Custom Path to db.json
  */
 export function loadDbToCollection(self: OwnClt, path?: string) {
-    const cltDatabase = path ? path : self.ownCltPath(".ownclt/db.json");
+    const cltDatabase = path ? path : self.dotOwnCltPath("db.json");
     // Load db.json
     self.db.replaceData(require(cltDatabase));
 }
@@ -32,7 +32,7 @@ export function loadDbToCollection(self: OwnClt, path?: string) {
  */
 export function installedOrInstall(self: OwnClt) {
     const cltFolder = self.ownCltPath(".ownclt");
-    const cltDatabase = self.ownCltPath(".ownclt/db.json");
+    const cltDatabase = self.dotOwnCltPath("db.json");
 
     // Checkers
     const hasCltDb = fs.existsSync(cltDatabase);
@@ -161,19 +161,12 @@ export async function loadCommandHandler(ownClt: OwnClt) {
                 if (!findSubCommand) {
                     return log.warningAndExit(`Command "${command}" does not exists.`);
                 } else if (findSubCommand && typeof findSubCommand !== "function") {
-                    const lastSubCommand = subCommands[subCommands.length - 1];
                     // check if object
                     if (
                         typeof findSubCommand === "object" &&
-                        (findSubCommand.hasOwnProperty("default") ||
-                            findSubCommand.hasOwnProperty(lastSubCommand))
+                        findSubCommand.hasOwnProperty("default")
                     ) {
-                        const defaultSubCommand =
-                            findSubCommand[
-                                findSubCommand.hasOwnProperty("default")
-                                    ? "default"
-                                    : lastSubCommand
-                            ];
+                        const defaultSubCommand = findSubCommand["default"];
 
                         if (typeof defaultSubCommand !== "function") {
                             return log.errorAndExit(
@@ -211,7 +204,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             ownclt: () => ownClt
         };
 
-        // Setup self function.
+        // Setup self-function.
         data.self = function (name: string, args: any | any[] = []) {
             if (!Array.isArray(args)) args = [args];
 
@@ -228,14 +221,23 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             }
 
             if (typeof thisFn !== "function") {
-                return log.errorAndExit(`Command: "${name}" is not callable in self!`);
+                if (typeof thisFn === "object" && thisFn.hasOwnProperty("default")) {
+                    thisFn = thisFn["default"];
+                } else {
+                    return log.errorAndExit(`Command: "${name}" is not callable in self!`);
+                }
             }
 
             return thisFn(
+                // set new data
                 Obj(data)
                     .cloneThis()
                     .unset("args")
-                    .set({ state: data.state, args, fromSelf: true })
+                    .set({
+                        state: data.state,
+                        args,
+                        fromSelf: true
+                    })
                     .all()
             );
         };

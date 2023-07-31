@@ -39,7 +39,7 @@ class OwnClt {
         this.config = config;
 
         // Open Db Collection
-        const dbPath = this.ownCltPath(".ownclt/db.json");
+        const dbPath = this.dotOwnCltPath("db.json");
         this.db = new OwnCltDatabase(dbPath);
 
         // Set Db Path
@@ -83,6 +83,14 @@ class OwnClt {
         if (!this.#cache.has(key)) this.#cache.set(key, Path.dirname(this.config.caller));
         // get from cache
         return path ? Path.resolve(this.#cache.get(key) + "/" + path) : this.#cache.get(key);
+    }
+
+    /**
+     * Get the .ownclt folder path.
+     * @param path
+     */
+    dotOwnCltPath(path?: string) {
+        return this.ownCltPath(".ownclt/" + path);
     }
 
     getCache<T = any>(key: string, def?: T): T {

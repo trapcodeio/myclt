@@ -86,31 +86,101 @@ export default defineCommands({
          * Link Command from a git repo.
          * This command clones the git repo and links the directory to ownclt commands.
          */
-        async git({ log, command, ownclt, args: [url, as] }) {
-            // check if git exists
-            try {
-                execSync("git --version", { encoding: "utf8" });
-            } catch (e) {
-                return log.errorAndExit(`${command}: Git is not installed.`);
+        git: {
+            default({ log, command, ownclt, self, state, args: [url, folder, as] }) {
+                const isUpdating = state.get<boolean>("updateGitFolderOnly", false);
+
+                // check if git exists
+                try {
+                    execSync("git --version", { encoding: "utf8" });
+                } catch (e) {
+                    return log.errorAndExit(`${command}: Git is not installed.`);
+                }
+
+                // Exit if no url
+                if (!url) return log.errorAndExit(`${command}: Git URL is required!`);
+
+                // url should be a git url
+                if (!url.startsWith("git@") && !url.startsWith("https://")) {
+                    return log.errorAndExit(`${command}: Invalid Git URL!`);
+                }
+
+                // Exit if no path
+                if (!folder && !isUpdating)
+                    return log.errorAndExit(`${command}: Map folder is required!`);
+
+                const ownClt = ownclt();
+                const gitCommandsFolder = ownClt.dotOwnCltPath("commands/git");
+
+                // generate git destination folder
+                // this should be the username/repo format
+                // we have to get this info from the url
+                const split = url.split("/");
+
+                // get the last two items
+                let repo = split.slice(-2).join("/");
+                // remove .git from the repo name
+                repo = repo.replace(".git", "");
+
+                const gitFolder = path.resolve(gitCommandsFolder, repo);
+
+                // check if folder exits
+                if (!fs.existsSync(gitFolder)) {
+                    fs.mkdirSync(gitFolder, { recursive: true });
+                }
+
+                // check if the folder is empty
+                if (fs.readdirSync(gitFolder).length > 0) {
+                    if (isUpdating) {
+                        // delete the folder
+                        fs.rmSync(gitFolder, { recursive: true });
+                    } else {
+                        log.error(`${command}: "${repo}" already exists.`);
+                        log.info(`Use "ownclt /link/git/update ${url}" to update the contents.`);
+                    }
+
+                    return;
+                }
+
+                try {
+                    execSync(`git clone ${url} ${gitFolder}`, {
+                        encoding: "utf8",
+                        cwd: gitCommandsFolder,
+                        stdio: "inherit"
+                    });
+                } catch (e: any) {
+                    return log.errorAndExit(`${command}: Error while cloning git repo: ${url}`);
+                }
+
+                // stop if updating
+                if (isUpdating) {
+                    return;
+                }
+
+                // check if the path to map file exists
+                const mapFileFolder = path.resolve(gitFolder + "/" + folder);
+                const mapFile = path.resolve(mapFileFolder, "ownclt.map.json");
+
+                if (!fs.existsSync(mapFile))
+                    return log.errorAndExit(`${command}: Map file not found in repo: "${repo}"`);
+
+                // call link command
+                self("link", [mapFileFolder, as]);
+            },
+
+            /**
+             * Update Command from a git repo.
+             */
+            update({ state, args, self, log }) {
+                // set state
+                state.set("updateGitFolderOnly", true);
+
+                // call git link command
+                self("link/git", args);
+
+                log.emptyLine();
+                return log.successAndExit(`Command source codes have been updated: "${args[0]}"`);
             }
-
-            // Exit if no url
-            if (!url) return log.errorAndExit(`${command}: Git URL is required!`);
-
-            // ask for path to ownclt map file
-            const readline = require("readline").createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-
-            const res = await new Promise<string>((resolve) => {
-                readline.question("Path to ownclt.map.json: ", (path: string) => {
-                    readline.close();
-                    resolve(path);
-                });
-            });
-
-            console.log(res);
         }
     },
 
