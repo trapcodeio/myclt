@@ -21,7 +21,13 @@ class OwnClt {
     db: OwnCltDatabase;
 
     // Query Holder
-    query?: { command: string; args: string[]; subCommands: string[]; commandHandler: string };
+    query?: {
+        namespace: string;
+        command: string;
+        args: string[];
+        subCommands: string[];
+        commandHandler: string;
+    };
 
     constructor(config: OwnCltConfig) {
         // Trim command
@@ -97,7 +103,9 @@ class OwnClt {
         return this.#cache.get(key, def) as T;
     }
 
-    // getDb(){}
+    setCache<T = any>(key: string, value: T): T {
+        return this.#cache.set(key, value) as T;
+    }
 }
 
 export default OwnClt;

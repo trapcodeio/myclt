@@ -94,6 +94,7 @@ export function processCliQuery(self: OwnClt) {
     self.query = {
         args,
         command,
+        namespace: commandMap.namespace,
         subCommands,
         commandHandler: commandMap.file
     };
@@ -207,7 +208,35 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             },
             self: undefined as any,
             fromSelf: false,
-            ownclt: () => ownClt
+            ownclt: () => ownClt,
+            store: (() => {
+                const obj = ownClt.db.path("store").path(ownClt.query!.namespace);
+
+                return {
+                    get: (key, def) => obj.get<any>(key, def),
+                    set: (key, value) => {
+                        // set value
+                        obj.set(key, value);
+
+                        // save db
+                        ownClt.db.save();
+
+                        // return value
+                        return value;
+                    },
+                    has: (key) => obj.has(key),
+                    unset: (key) => {
+                        // unset value
+                        obj.unset(key);
+
+                        // save db
+                        ownClt.db.save();
+
+                        // return check
+                        return obj.has(key);
+                    }
+                };
+            })()
         };
 
         // Setup self-function.

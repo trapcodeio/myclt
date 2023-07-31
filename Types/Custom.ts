@@ -9,6 +9,13 @@ export interface OwnCltConfig {
 }
 
 export type OwnCltLoggers = typeof loggers;
+export type OwnCltStore = {
+    set: <T = any>(key: string, value: T) => T;
+    get: <T = any>(key: string, def?: T) => T;
+    has: (key: string) => boolean;
+    unset: (key: string) => boolean;
+};
+
 export type OwnCltCommandFnContext = {
     args: string[];
     command: string;
@@ -19,6 +26,7 @@ export type OwnCltCommandFnContext = {
     self: (name: string, args?: any | any[]) => any;
     fromSelf: boolean;
     ownclt: () => OwnClt;
+    store: OwnCltStore;
 };
 
 export type OwnCltMapFile = {

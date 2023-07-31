@@ -5,7 +5,7 @@ import { defineCommands } from "../../functions/Helpers";
 // });
 
 export default defineCommands({
-    world({ log }) {
-        return log.success("Hello World");
+    world() {
+        console.log("Hello World");
     }
 });
