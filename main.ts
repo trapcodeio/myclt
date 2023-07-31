@@ -1,5 +1,5 @@
-import { infoAndExit } from "./Functions/Loggers";
-import OwnClt from "./Classes/OwnClt";
+import { infoAndExit } from "./functions/Loggers";
+import OwnClt from "./classes/OwnClt";
 
 async function Main() {
     // Process Args
@@ -7,7 +7,7 @@ async function Main() {
 
     // Check if commands have any command
     if (!commands || (commands && !commands.length)) {
-        return infoAndExit("No command provided!");
+        return infoAndExit(`No command provided!, Run "ownclt /list" for more info.`);
     }
 
     // Get Command and Args

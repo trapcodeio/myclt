@@ -6,7 +6,7 @@ export default () => ({
     commands: {
         clt: <OwnCltDbCommandData>{
             namespace: "clt",
-            file: Path.resolve(__dirname, "../Commands/clt.js"),
+            file: Path.resolve(__dirname, "../commands/clt.js"),
             commands: {
                 link: { desc: "Links current working directory to ownclt." },
                 unlink: {

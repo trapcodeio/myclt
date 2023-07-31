@@ -1,6 +1,6 @@
-import * as loggers from "../Functions/Loggers";
-import OwnCltState from "../Classes/OwnCltState";
-import OwnClt from "../Classes/OwnClt";
+import * as loggers from "../functions/Loggers";
+import OwnCltState from "../classes/OwnCltState";
+import OwnClt from "../classes/OwnClt";
 
 export interface OwnCltConfig {
     command: string;

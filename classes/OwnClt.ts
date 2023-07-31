@@ -5,7 +5,7 @@
  */
 import { OwnCltConfig } from "../Types/Custom";
 import Path from "path";
-import { installedOrInstall, loadCommandHandler, processCliQuery } from "../Functions/Tasks";
+import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/Tasks";
 import OwnCltDatabase from "./OwnCltDatabase";
 import { Obj } from "object-collection/exports";
 

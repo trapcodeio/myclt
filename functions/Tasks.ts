@@ -1,17 +1,17 @@
-import OwnClt from "../Classes/OwnClt";
+import OwnClt from "../classes/OwnClt";
 import * as fs from "fs";
 import * as Path from "path";
 import jsonpointer from "jsonpointer";
 import * as log from "./Loggers";
 
-import FactoryDb from "../Factory/db";
+import FactoryDb from "../factory/db";
 import {
     OwnCltCommandFn,
     OwnCltCommandFnContext,
     OwnCltCommandsObject,
     OwnCltMapFile
 } from "../Types/Custom";
-import OwnCltState from "../Classes/OwnCltState";
+import OwnCltState from "../classes/OwnCltState";
 import { Obj } from "object-collection/exports";
 
 /**

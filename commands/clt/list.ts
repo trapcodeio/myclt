@@ -1,7 +1,7 @@
-import { defineCommands } from "../../Functions/Helpers";
+import { defineCommands } from "../../functions/Helpers";
 import { OwnCltDbCommandData } from "../../Types/Custom";
 import chalk = require("chalk");
-import type OwnClt from "../../Classes/OwnClt";
+import type OwnClt from "../../classes/OwnClt";
 
 export default defineCommands({
     /**
