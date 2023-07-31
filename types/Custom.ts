@@ -14,6 +14,7 @@ export type OwnCltStore = {
     get: <T = any>(key: string, def?: T) => T;
     has: (key: string) => boolean;
     unset: (key: string) => boolean;
+    all: <T extends Record<string, any>>() => T;
 };
 
 export type OwnCltCommandFnContext = {

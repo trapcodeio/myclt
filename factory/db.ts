@@ -40,19 +40,6 @@ export default () => ({
                     args: {
                         search: "Query to search for"
                     }
-                },
-                set: {
-                    desc: "Set a value using a key.",
-                    args: {
-                        key: "required: Key to set.",
-                        value: "required: Value to set."
-                    }
-                },
-                get: {
-                    desc: "Get a value using a key.",
-                    args: {
-                        key: "required: Key to get."
-                    }
                 }
             }
         }

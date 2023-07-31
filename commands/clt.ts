@@ -8,7 +8,9 @@ import { execSync } from "child_process";
 export default defineCommands({
     context(ctx) {
         const data: Record<keyof typeof ctx, any> = ctx;
+
         delete data.log;
+        delete data.store;
 
         console.dir(JSON.parse(JSON.stringify(ctx, null, 2)), { depth: 10 });
     },

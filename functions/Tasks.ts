@@ -145,7 +145,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
     if (typeof Commands === "object") {
         // if it has subcommands
         if (!subCommands.length) {
-            return log.errorAndExit(`Command "${command}" is incomplete, requires subCommands.`);
+            return log.errorAndExit(`Command "${command}" is incomplete, requires a sub command.`);
         }
 
         /**
@@ -234,7 +234,8 @@ export async function loadCommandHandler(ownClt: OwnClt) {
 
                         // return check
                         return obj.has(key);
-                    }
+                    },
+                    all: () => obj.all()
                 };
             })()
         };
