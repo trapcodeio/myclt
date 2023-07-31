@@ -109,6 +109,11 @@ export default defineCommands({
                 if (!folder && !isUpdating)
                     return log.errorAndExit(`${command}: Map folder is required!`);
 
+                if (folder.startsWith("/")) {
+                    // remove the first slash
+                    folder = folder.slice(1);
+                }
+
                 const ownClt = ownclt();
                 const gitCommandsFolder = ownClt.dotOwnCltPath("commands/git");
 
@@ -130,39 +135,39 @@ export default defineCommands({
                 }
 
                 // check if the folder is empty
+                let isEmpty = true;
                 if (fs.readdirSync(gitFolder).length > 0) {
                     if (isUpdating) {
                         // delete the folder
                         fs.rmSync(gitFolder, { recursive: true });
                     } else {
-                        log.error(`${command}: "${repo}" already exists.`);
-                        log.info(`Use "ownclt /link/git/update ${url}" to update the contents.`);
+                        isEmpty = false;
                     }
-
-                    return;
                 }
 
-                try {
-                    execSync(`git clone ${url} ${gitFolder}`, {
-                        encoding: "utf8",
-                        cwd: gitCommandsFolder,
-                        stdio: "inherit"
-                    });
-                } catch (e: any) {
-                    return log.errorAndExit(`${command}: Error while cloning git repo: ${url}`);
+                if (isEmpty) {
+                    try {
+                        execSync(`git clone ${url} ${gitFolder}`, {
+                            encoding: "utf8",
+                            cwd: gitCommandsFolder,
+                            stdio: "inherit"
+                        });
+                    } catch (e: any) {
+                        return log.errorAndExit(`${command}: Error while cloning git repo: ${url}`);
+                    }
                 }
 
                 // stop if updating
-                if (isUpdating) {
-                    return;
-                }
+                if (isUpdating) return;
 
                 // check if the path to map file exists
-                const mapFileFolder = path.resolve(gitFolder + "/" + folder);
+                const mapFileFolder = path.resolve(gitFolder, folder);
                 const mapFile = path.resolve(mapFileFolder, "ownclt.map.json");
 
                 if (!fs.existsSync(mapFile))
-                    return log.errorAndExit(`${command}: Map file not found in repo: "${repo}"`);
+                    return log.errorAndExit(
+                        `${command}: Map file not found in repo path: "${repo + "/" + folder}"`
+                    );
 
                 // call link command
                 self("link", [mapFileFolder, as]);
