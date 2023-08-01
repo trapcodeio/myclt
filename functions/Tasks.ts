@@ -264,7 +264,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
  * @param ownClt
  */
 export function makeStoreObject(ownClt: OwnClt) {
-    const obj = ownClt.db.path("store").path(ownClt.query!.namespace);
+    let obj = ownClt.db.path("store").path(ownClt.query!.namespace);
 
     return <OwnCltStore>{
         get: (key, def) => obj.get<any>(key, def),
@@ -284,7 +284,7 @@ export function makeStoreObject(ownClt: OwnClt) {
             ownClt.db.save();
         },
         clear: () => {
-            ownClt.db.path("store").unset(ownClt.query!.namespace);
+            obj = ownClt.db.path("store").unset(ownClt.query!.namespace);
             ownClt.db.save();
         },
         /**
