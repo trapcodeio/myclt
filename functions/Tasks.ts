@@ -9,10 +9,12 @@ import {
     OwnCltCommandFn,
     OwnCltCommandFnContext,
     OwnCltCommandsObject,
-    OwnCltMapFile
+    OwnCltMapFile,
+    OwnCltStore
 } from "../types/Custom";
 import OwnCltState from "../classes/OwnCltState";
 import { Obj } from "object-collection/exports";
+import ObjectCollection from "object-collection";
 
 /**
  * Loads the content of the database file as a collection.
@@ -209,35 +211,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             self: undefined as any,
             fromSelf: false,
             ownclt: () => ownClt,
-            store: (() => {
-                const obj = ownClt.db.path("store").path(ownClt.query!.namespace);
-
-                return {
-                    get: (key, def) => obj.get<any>(key, def),
-                    set: (key, value) => {
-                        // set value
-                        obj.set(key, value);
-
-                        // save db
-                        ownClt.db.save();
-
-                        // return value
-                        return value;
-                    },
-                    has: (key) => obj.has(key),
-                    unset: (key) => {
-                        // unset value
-                        obj.unset(key);
-
-                        // save db
-                        ownClt.db.save();
-
-                        // return check
-                        return obj.has(key);
-                    },
-                    all: () => obj.all()
-                };
-            })()
+            store: makeStoreObject(ownClt)
         };
 
         // Setup self-function.
@@ -280,4 +254,38 @@ export async function loadCommandHandler(ownClt: OwnClt) {
 
         return (mainSubCommand as OwnCltCommandFn)(data);
     }
+}
+
+export function makeStoreObject(ownClt: OwnClt): OwnCltStore {
+    const obj = ownClt.db.path("store").path(ownClt.query!.namespace);
+
+    return {
+        get: (key, def) => obj.get<any>(key, def),
+        set: (key, value) => {
+            // set value
+            obj.set(key, value);
+
+            // save db
+            ownClt.db.save();
+
+            // return value
+            return value;
+        },
+        has: (key) => obj.has(key),
+        unset: (key) => {
+            // unset value
+            obj.unset(key);
+
+            // save db
+            ownClt.db.save();
+
+            // return check
+            return obj.has(key);
+        },
+        /**
+         * We are using a collection, because we don't want any inheritance with store.
+         * returning the raw data would be a bad idea.
+         */
+        collection: <T extends Record<string, any>>() => obj.cloneThis() as ObjectCollection<T>
+    };
 }

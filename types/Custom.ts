@@ -1,6 +1,7 @@
 import * as loggers from "../functions/Loggers";
 import OwnCltState from "../classes/OwnCltState";
 import OwnClt from "../classes/OwnClt";
+import ObjectCollection from "object-collection";
 
 export interface OwnCltConfig {
     command: string;
@@ -14,7 +15,7 @@ export type OwnCltStore = {
     get: <T = any>(key: string, def?: T) => T;
     has: (key: string) => boolean;
     unset: (key: string) => boolean;
-    all: <T extends Record<string, any>>() => T;
+    collection: <T extends Record<string, any>>() => ObjectCollection<T>;
 };
 
 export type OwnCltCommandFnContext = {
