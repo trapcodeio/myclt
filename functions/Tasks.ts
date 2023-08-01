@@ -284,9 +284,7 @@ export function makeStoreObject(ownClt: OwnClt) {
             ownClt.db.save();
         },
         clear: () => {
-            obj.data = {};
-
-            // save db
+            ownClt.db.path("store").unset(ownClt.query!.namespace);
             ownClt.db.save();
         },
         /**
