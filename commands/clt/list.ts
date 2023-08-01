@@ -1,6 +1,6 @@
 import { defineCommands } from "../../functions/Helpers";
 import { OwnCltDbCommandData } from "../../types/Custom";
-import chalk = require("chalk");
+import chalk from "chalk";
 import type OwnClt from "../../classes/OwnClt";
 
 export default defineCommands({
@@ -32,7 +32,13 @@ export default defineCommands({
 
         // Print the header
         console.log(
-            `[Command]${" ".repeat(longestKeyLength - "[Command]".length)} ${pipe} [Description]`
+            chalk.bold(
+                chalk.dim(
+                    `[Command]${" ".repeat(
+                        longestKeyLength - "[Command]".length
+                    )} ${pipe} [Description]`
+                )
+            )
         );
 
         // Print the separator
@@ -42,15 +48,22 @@ export default defineCommands({
         // if is search, only print the commands that match the search query
         // else print all commands
         let results = 0;
-        for (const [key, desc] of Object.entries(commands)) {
+        let headerName: string | undefined;
+        for (const [key, data] of Object.entries(commands)) {
             if (search) {
-                if (!key.includes(search) && !desc.toLowerCase().includes(search)) continue;
+                if (!key.includes(search)) continue;
+            }
+
+            if (data.namespace !== headerName) {
+                if (results) log.emptyLine();
+                headerName = data.namespace;
+                console.log(chalk.bold(`[${headerName}]`));
             }
 
             console.log(
                 `${chalk.yellowBright(key)}${" ".repeat(
                     longestKeyLength - key.length
-                )} ${pipe} ${chalk.cyan(desc)}`
+                )} ${pipe} ${chalk.cyan(data.desc)}`
             );
 
             results++;
@@ -79,13 +92,16 @@ export default defineCommands({
  * @param ownclt
  */
 function getCommands(ownclt: OwnClt) {
-    const commands: Record<string, string> = {};
+    const commands: Record<string, { namespace: string; desc: string }> = {};
     const dbCommands = ownclt.db.get<Record<string, OwnCltDbCommandData>>("commands");
 
     for (const [namespace, map] of Object.entries(dbCommands)) {
         // loop through each command
         for (const [command, { desc }] of Object.entries(map.commands)) {
-            commands[namespace === "clt" ? `/${command}` : `${namespace}/${command}`] = desc;
+            commands[namespace === "clt" ? `/${command}` : `${namespace}/${command}`] = {
+                desc,
+                namespace
+            };
         }
     }
 
