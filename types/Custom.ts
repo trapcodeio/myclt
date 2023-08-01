@@ -11,11 +11,13 @@ export interface OwnCltConfig {
 
 export type OwnCltLoggers = typeof loggers;
 export type OwnCltStore = {
-    set: <T = any>(key: string, value: T) => T;
-    get: <T = any>(key: string, def?: T) => T;
-    has: (key: string) => boolean;
-    unset: (key: string) => boolean;
-    collection: <T extends Record<string, any>>() => ObjectCollection<T>;
+    set(data: Record<string, any>): void;
+    set(key: string, value?: any): void;
+    get<T = any>(key: string, def?: T): T;
+    has(key: string): boolean;
+    unset(key: string): void;
+    clear(): void;
+    collection<T extends Record<string, any>>(): ObjectCollection<T>;
 };
 
 export type OwnCltCommandFnContext = {

@@ -256,10 +256,17 @@ export async function loadCommandHandler(ownClt: OwnClt) {
     }
 }
 
-export function makeStoreObject(ownClt: OwnClt): OwnCltStore {
+/**
+ * Make Store Object
+ * This function is used to make a store object
+ * To prevent the user from accessing the db directly
+ * It also ties the current namespace to the store object
+ * @param ownClt
+ */
+export function makeStoreObject(ownClt: OwnClt) {
     const obj = ownClt.db.path("store").path(ownClt.query!.namespace);
 
-    return {
+    return <OwnCltStore>{
         get: (key, def) => obj.get<any>(key, def),
         set: (key, value) => {
             // set value
@@ -267,9 +274,6 @@ export function makeStoreObject(ownClt: OwnClt): OwnCltStore {
 
             // save db
             ownClt.db.save();
-
-            // return value
-            return value;
         },
         has: (key) => obj.has(key),
         unset: (key) => {
@@ -278,9 +282,12 @@ export function makeStoreObject(ownClt: OwnClt): OwnCltStore {
 
             // save db
             ownClt.db.save();
+        },
+        clear: () => {
+            obj.data = {};
 
-            // return check
-            return obj.has(key);
+            // save db
+            ownClt.db.save();
         },
         /**
          * We are using a collection, because we don't want any inheritance with store.
