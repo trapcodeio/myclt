@@ -6,6 +6,10 @@ import list from "./clt/list";
 import { execSync } from "child_process";
 
 export default defineCommands({
+    /**
+     * `clt /context`
+     * @param ctx
+     */
     context(ctx) {
         const data: Record<keyof typeof ctx, any> = ctx;
 
@@ -16,6 +20,7 @@ export default defineCommands({
     },
 
     /**
+     * `clt /link`
      * Link Command
      * This command links the current working directory to ownclt commands.
      * @param args - Args received!
@@ -85,6 +90,7 @@ export default defineCommands({
         },
 
         /**
+         * `clt /link/git`
          * Link Command from a git repo.
          * This command clones the git repo and links the directory to ownclt commands.
          */
@@ -176,6 +182,7 @@ export default defineCommands({
             },
 
             /**
+             * `clt /link/git/update`
              * Update Command from a git repo.
              */
             update({ state, args, self, log }) {
@@ -192,6 +199,7 @@ export default defineCommands({
     },
 
     /**
+     * `clt /unlink`
      * UnLink Command
      * This commands unlinks the current working directory to ownclt commands.
      * @param args - Args received!
@@ -227,6 +235,9 @@ export default defineCommands({
             return log.successAndExit(`Command Unlinked: "${namespace}"`);
         },
 
+        /**
+         * `clt /unlink/folder`
+         */
         folder({ ownclt, state, self, command, args: [folder], log }) {
             // Exit if no folder
             if (!folder) return log.errorAndExit(`${command}: Folder is required!`);

@@ -6,7 +6,6 @@ import type OwnClt from "../../classes/OwnClt";
 export default defineCommands({
     /**
      * Default Command for:
-     * `clt /ls`
      * `clt /list`
      */
     default({ ownclt, log, args: [search] }) {
