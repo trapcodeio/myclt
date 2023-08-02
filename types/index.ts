@@ -11,12 +11,12 @@ export interface OwnCltConfig {
 
 export type OwnCltLoggers = typeof loggers;
 export type OwnCltStore = {
-    set(data: Record<string, any>): void;
-    set(key: string, value?: any): void;
+    set(key: string | Record<string, any>, value?: any): void;
     get<T = any>(key: string, def?: T): T;
     has(key: string): boolean;
     unset(key: string): void;
     clear(): void;
+    commitChanges(): void;
     collection<T extends Record<string, any>>(): ObjectCollection<T>;
 };
 
@@ -45,3 +45,7 @@ export type OwnCltDbCommandData = OwnCltMapFile & {
 
 export type OwnCltCommandFn = (ctx: OwnCltCommandFnContext) => any;
 export type OwnCltCommandsObject = { [key: string]: OwnCltCommandFn | OwnCltCommandsObject };
+
+export function As<T>(data: T) {
+    return data;
+}

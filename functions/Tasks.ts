@@ -6,6 +6,7 @@ import * as log from "./Loggers";
 
 import FactoryDb from "../factory/db";
 import {
+    As,
     OwnCltCommandFn,
     OwnCltCommandFnContext,
     OwnCltCommandsObject,
@@ -266,29 +267,24 @@ export async function loadCommandHandler(ownClt: OwnClt) {
 export function makeStoreObject(ownClt: OwnClt) {
     const obj = ownClt.db.path("store").path(ownClt.query!.namespace, {});
 
-    return <OwnCltStore>{
+    return As<OwnCltStore>({
         get: (key, def) => obj.get<any>(key, def),
         set: (key, value) => {
             // set value
             obj.set(key, value);
-
-            // save db
-            ownClt.db.save();
         },
         has: (key) => obj.has(key),
         unset: (key) => {
             // unset value
             obj.unset(key);
-
-            // save db
-            ownClt.db.save();
         },
         clear: () => {
             const keys = obj.keys();
 
             // unset value
             for (const key of keys) obj.unset(key);
-
+        },
+        commitChanges() {
             ownClt.db.save();
         },
         /**
@@ -296,5 +292,5 @@ export function makeStoreObject(ownClt: OwnClt) {
          * returning the raw data would be a bad idea.
          */
         collection: <T extends Record<string, any>>() => obj.cloneThis() as ObjectCollection<T>
-    };
+    });
 }
