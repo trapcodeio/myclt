@@ -1,5 +1,5 @@
 import { defineCommands } from "../../functions/Helpers";
-import { OwnCltDbCommandData } from "../../types/Custom";
+import { OwnCltDbCommandData } from "../../types";
 import chalk from "chalk";
 import type OwnClt from "../../classes/OwnClt";
 

@@ -1,5 +1,5 @@
 import Path = require("path");
-import { OwnCltDbCommandData } from "../types/Custom";
+import { OwnCltDbCommandData } from "../types";
 
 export default () => ({
     updated: new Date(),

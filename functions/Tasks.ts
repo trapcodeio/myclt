@@ -11,7 +11,7 @@ import {
     OwnCltCommandsObject,
     OwnCltMapFile,
     OwnCltStore
-} from "../types/Custom";
+} from "../types";
 import OwnCltState from "../classes/OwnCltState";
 import { Obj } from "object-collection/exports";
 import ObjectCollection from "object-collection";
@@ -264,8 +264,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
  * @param ownClt
  */
 export function makeStoreObject(ownClt: OwnClt) {
-    const store = ownClt.db.path("store");
-    const obj = store.path(ownClt.query!.namespace);
+    const obj = ownClt.db.path("store").path(ownClt.query!.namespace, {});
 
     return <OwnCltStore>{
         get: (key, def) => obj.get<any>(key, def),
@@ -285,7 +284,11 @@ export function makeStoreObject(ownClt: OwnClt) {
             ownClt.db.save();
         },
         clear: () => {
-            store.set(ownClt.query!.namespace, {});
+            const keys = obj.keys();
+
+            // unset value
+            for (const key of keys) obj.unset(key);
+
             ownClt.db.save();
         },
         /**

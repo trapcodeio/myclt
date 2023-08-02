@@ -1,4 +1,4 @@
-import { OwnCltCommandFnContext, OwnCltCommandsObject } from "../types/Custom";
+import { OwnCltCommandFnContext, OwnCltCommandsObject } from "../types";
 import * as path from "path";
 import * as fs from "fs";
 

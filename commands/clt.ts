@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { OwnCltMapFile } from "../types/Custom";
+import type { OwnCltMapFile } from "../types";
 import { defineCommands } from "../functions/Helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
