@@ -26,8 +26,8 @@ npx myclt /list
 ## Creating a command.
 To create a command two files are needed.
 
-1. The command file. (js or ts)
-2. The command map file. (json)
+1. The command file. (js or ts) - The file where commands are defined.
+2. The command map file. (json) - The file where the command is mapped to the command file.
 
 
 ### Typescript
