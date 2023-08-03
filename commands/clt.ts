@@ -170,9 +170,10 @@ export default defineCommands({
 
                 // check if package.json exists in git repo
                 const pkgDotJson = path.resolve(gitFolder, "package.json");
+                const nodeModules = path.resolve(gitFolder, "node_modules");
 
                 // if package.json exists, install dependencies
-                if (fs.existsSync(pkgDotJson)) {
+                if (fs.existsSync(pkgDotJson) && !fs.existsSync(nodeModules)) {
                     try {
                         log.info("Installing dependencies...");
                         execSync("npm install", {
