@@ -157,13 +157,31 @@ export default defineCommands({
 
                 if (isEmpty) {
                     try {
+                        log.info(`Cloning into: ${gitFolder}...`);
                         execSync(`git clone ${url} ${gitFolder}`, {
                             encoding: "utf8",
                             cwd: gitCommandsFolder,
-                            stdio: "inherit"
+                            stdio: "ignore"
                         });
                     } catch (e: any) {
                         return log.errorAndExit(`${command}: Error while cloning git repo: ${url}`);
+                    }
+                }
+
+                // check if package.json exists in git repo
+                const pkgDotJson = path.resolve(gitFolder, "package.json");
+
+                // if package.json exists, install dependencies
+                if (fs.existsSync(pkgDotJson)) {
+                    try {
+                        log.info("Installing dependencies...");
+                        execSync("npm install", {
+                            encoding: "utf8",
+                            cwd: gitFolder,
+                            stdio: "ignore"
+                        });
+                    } catch (e: any) {
+                        return log.errorAndExit(`${command}: Error while installing dependencies.`);
                     }
                 }
 
