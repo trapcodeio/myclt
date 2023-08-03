@@ -8,6 +8,7 @@ export default () => ({
             namespace: "clt",
             file: Path.resolve(__dirname, "../commands/clt.js"),
             commands: {
+                version: { desc: "Prints the version of ownclt." },
                 context: { desc: "Prints the context of a command." },
                 link: { desc: "Links current working directory to ownclt." },
                 "link/git": {

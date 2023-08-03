@@ -6,6 +6,13 @@ import list from "./clt/list";
 import { execSync } from "child_process";
 
 export default defineCommands({
+    version({ ownclt, log }) {
+        const ownClt = ownclt();
+        const pkgDotJson = path.resolve(ownClt.ownCltPath("package.json"));
+        const pkg = require(pkgDotJson);
+        log.info(pkg.version);
+    },
+
     /**
      * `clt /context`
      * @param ctx
