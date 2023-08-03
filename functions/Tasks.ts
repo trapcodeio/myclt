@@ -132,7 +132,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
         // check if commandHandler is a ts file
         if (commandHandler.endsWith(".ts")) {
             // register ts-node
-            require("ts-node/register");
+            require("ts-node/register/transpile-only");
         }
 
         Commands = require(Path.resolve(commandHandler));
