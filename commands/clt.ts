@@ -117,11 +117,6 @@ export default defineCommands({
                 if (!folder && !isUpdating)
                     return log.errorAndExit(`${command}: Map folder is required!`);
 
-                if (folder.startsWith("/")) {
-                    // remove the first slash
-                    folder = folder.slice(1);
-                }
-
                 const ownClt = ownclt();
                 const gitCommandsFolder = ownClt.dotOwnCltPath("commands/git");
 
@@ -167,6 +162,11 @@ export default defineCommands({
 
                 // stop if updating
                 if (isUpdating) return;
+
+                if (folder.startsWith("/")) {
+                    // remove the first slash
+                    folder = folder.slice(1);
+                }
 
                 // check if the path to map file exists
                 const mapFileFolder = path.resolve(gitFolder, folder);
