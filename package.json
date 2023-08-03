@@ -1,6 +1,6 @@
 {
   "name": "ownclt",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "Own Command Line Tool",
   "main": "build/main.js",
   "repository": "https://github.com/ownclt/ownclt",
