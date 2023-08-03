@@ -1,9 +1,9 @@
-import { OwnCltCommandsObject } from "../types";
+import { MyCltCommandsObject } from "../types";
 import fs = require("fs");
 import { spawn } from "child_process";
 import ora = require("ora");
 
-export default <OwnCltCommandsObject>{
+export default <MyCltCommandsObject>{
     /**
      * runSubCommand
      */

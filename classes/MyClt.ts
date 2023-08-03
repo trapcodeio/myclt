@@ -1,25 +1,25 @@
 /**
- * OwnClt Class.
+ * MyClt Class.
  *
- * Holds all the components ownclt needs to run any command.
+ * Holds all the components myclt needs to run any command.
  */
-import { OwnCltConfig } from "../types";
+import { MyCltConfig } from "../types";
 import Path from "path";
 import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/Tasks";
-import OwnCltDatabase from "./OwnCltDatabase";
+import MyCltDatabase from "./MyCltDatabase";
 import { Obj } from "object-collection/exports";
 import * as os from "os";
 
-class OwnClt {
+class MyClt {
     // started
     #started: boolean = false;
     // Config Data
-    config: OwnCltConfig;
+    config: MyCltConfig;
     // Cache Holder as ObjectCollection
     #cache = Obj({});
 
     // Db Data Accessor
-    db: OwnCltDatabase;
+    db: MyCltDatabase;
 
     // Query Holder
     query?: {
@@ -30,7 +30,7 @@ class OwnClt {
         commandHandler: string;
     };
 
-    constructor(config: OwnCltConfig) {
+    constructor(config: MyCltConfig) {
         // Trim command
         config.command = config.command.trim();
 
@@ -46,8 +46,8 @@ class OwnClt {
         this.config = config;
 
         // Open Db Collection
-        const dbPath = this.dotOwnCltPath("db.json");
-        this.db = new OwnCltDatabase(dbPath);
+        const dbPath = this.dotMyCltPath("db.json");
+        this.db = new MyCltDatabase(dbPath);
 
         // Set Db Path
         this.#cache.set("paths", { db: dbPath });
@@ -55,7 +55,7 @@ class OwnClt {
 
     /**
      * The Start function is first called before any other function.
-     * It starts processing all the data stored in the OwnClt instance it belongs to
+     * It starts processing all the data stored in the MyClt instance it belongs to
      */
     async start() {
         if (this.#started) return this;
@@ -64,7 +64,7 @@ class OwnClt {
         this.#started = true;
 
         /**
-         * Check if ownclt has been installed, if Yes, skip the installation process.
+         * Check if myclt has been installed, if Yes, skip the installation process.
          */
         installedOrInstall(this);
 
@@ -82,10 +82,10 @@ class OwnClt {
     }
 
     /**
-     * Get OwnClt Base Folder.
+     * Get MyClt Base Folder.
      */
-    ownCltPath(path?: string) {
-        const key = "ownCltPath";
+    myCltPath(path?: string) {
+        const key = "myCltPath";
         // Set to cache
         if (!this.#cache.has(key)) this.#cache.set(key, Path.dirname(this.config.caller));
         // get from cache
@@ -93,11 +93,11 @@ class OwnClt {
     }
 
     /**
-     * Get the .ownclt folder path.
+     * Get the .myclt folder path.
      * @param path
      */
-    dotOwnCltPath(path?: string) {
-        return Path.resolve(os.homedir() + "/.ownclt/" + (path || ""));
+    dotMyCltPath(path?: string) {
+        return Path.resolve(os.homedir() + "/.myclt/" + (path || ""));
     }
 
     getCache<T = any>(key: string, def?: T): T {
@@ -109,4 +109,4 @@ class OwnClt {
     }
 }
 
-export default OwnClt;
+export default MyClt;

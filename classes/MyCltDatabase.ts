@@ -1,7 +1,7 @@
 import ObjectCollection = require("object-collection");
 import * as fs from "fs";
 
-class OwnCltDatabase extends ObjectCollection {
+class MyCltDatabase extends ObjectCollection {
     public dbPath: string;
     constructor(dbPath: string) {
         super({});
@@ -19,4 +19,4 @@ class OwnCltDatabase extends ObjectCollection {
     }
 }
 
-export default OwnCltDatabase;
+export default MyCltDatabase;

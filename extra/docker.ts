@@ -1,8 +1,8 @@
-import { OwnCltCommandFnContext, OwnCltCommandsObject } from "../types";
+import { MyCltCommandFnContext, MyCltCommandsObject } from "../types";
 import * as path from "path";
 import * as fs from "fs";
 
-export default <OwnCltCommandsObject>{
+export default <MyCltCommandsObject>{
     /**
      * FixMongoEnv
      * This commands replaces all local path in env to docker supported url.
@@ -10,7 +10,7 @@ export default <OwnCltCommandsObject>{
      * @param log - Log Functions
      * @param paths
      */
-    fixMongoEnv: ({ log, paths }: OwnCltCommandFnContext) => {
+    fixMongoEnv: ({ log, paths }: MyCltCommandFnContext) => {
         const currentEnv = path.resolve(`${paths.cwd}/.env`);
 
         if (!fs.existsSync(currentEnv)) {

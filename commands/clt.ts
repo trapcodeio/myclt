@@ -1,14 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
-import type { OwnCltMapFile } from "../types";
+import type { MyCltMapFile } from "../types";
 import { defineCommands } from "../functions/Helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
 
 export default defineCommands({
-    version({ ownclt, log }) {
-        const ownClt = ownclt();
-        const pkgDotJson = path.resolve(ownClt.ownCltPath("package.json"));
+    version({ myclt, log }) {
+        const myClt = myclt();
+        const pkgDotJson = path.resolve(myClt.myCltPath("package.json"));
         const pkg = require(pkgDotJson);
         log.info(pkg.version);
     },
@@ -29,11 +29,11 @@ export default defineCommands({
     /**
      * `clt /link`
      * Link Command
-     * This command links the current working directory to ownclt commands.
+     * This command links the current working directory to myclt commands.
      * @param args - Args received!
      */
     link: {
-        default({ log, command, ownclt, state, args: [folder, as] }) {
+        default({ log, command, myclt, state, args: [folder, as] }) {
             // Exit if no folder
             if (!folder) return log.errorAndExit(`${command}: Folder is required!`);
 
@@ -44,27 +44,24 @@ export default defineCommands({
             if (!fs.existsSync(folder))
                 return log.errorAndExit(`${command}: Folder ${folder} does not exists`);
 
-            // find ownclt.map.json
-            const owncltMap = path.resolve(folder, "ownclt.map.json");
-            if (!fs.existsSync(owncltMap))
-                return log.errorAndExit(`${command}: OwnCltMap '${owncltMap}" does not exists`);
+            // find myclt.map.json
+            const mycltMap = path.resolve(folder, "myclt.map.json");
+            if (!fs.existsSync(mycltMap))
+                return log.errorAndExit(`${command}: MyCltMap '${mycltMap}" does not exists`);
 
-            let map: OwnCltMapFile;
+            let map: MyCltMapFile;
 
             try {
-                map = require(owncltMap);
+                map = require(mycltMap);
             } catch (e) {
-                return log.errorAndExit(
-                    `${command}: Error while parsing map file: ${owncltMap}`,
-                    e
-                );
+                return log.errorAndExit(`${command}: Error while parsing map file: ${mycltMap}`, e);
             }
 
             // Check if the command file exists
             map.file = path.resolve(folder, map.file);
             if (!fs.existsSync(map.file))
                 return log.errorAndExit(
-                    `${command}: OwnClt Command file: '${map.file}" does not exists.`
+                    `${command}: MyClt Command file: '${map.file}" does not exists.`
                 );
 
             // Return map file
@@ -73,8 +70,8 @@ export default defineCommands({
                 return;
             }
 
-            // get ownCliPath
-            const db = ownclt().db;
+            // get myCliPath
+            const db = myclt().db;
             const namespace = (as ? as : map.namespace).trim().toLowerCase();
 
             // check if namespace exists
@@ -83,7 +80,7 @@ export default defineCommands({
             }
 
             // set command
-            db.path(`commands.${namespace}`, map).set("mapFile", owncltMap);
+            db.path(`commands.${namespace}`, map).set("mapFile", mycltMap);
 
             // Save db
             db.save();
@@ -99,10 +96,10 @@ export default defineCommands({
         /**
          * `clt /link/git`
          * Link Command from a git repo.
-         * This command clones the git repo and links the directory to ownclt commands.
+         * This command clones the git repo and links the directory to myclt commands.
          */
         git: {
-            default({ log, command, ownclt, self, state, args: [url, folder, as] }) {
+            default({ log, command, myclt, self, state, args: [url, folder, as] }) {
                 const isUpdating = state.get<boolean>("updateGitFolderOnly", false);
 
                 // check if git exists
@@ -124,8 +121,8 @@ export default defineCommands({
                 if (!folder && !isUpdating)
                     return log.errorAndExit(`${command}: Map folder is required!`);
 
-                const ownClt = ownclt();
-                const gitCommandsFolder = ownClt.dotOwnCltPath("commands/git");
+                const myClt = myclt();
+                const gitCommandsFolder = myClt.dotMyCltPath("commands/git");
 
                 // generate git destination folder
                 // this should be the username/repo format
@@ -196,7 +193,7 @@ export default defineCommands({
 
                 // check if the path to map file exists
                 const mapFileFolder = path.resolve(gitFolder, folder);
-                const mapFile = path.resolve(mapFileFolder, "ownclt.map.json");
+                const mapFile = path.resolve(mapFileFolder, "myclt.map.json");
 
                 if (!fs.existsSync(mapFile))
                     return log.errorAndExit(
@@ -227,16 +224,16 @@ export default defineCommands({
     /**
      * `clt /unlink`
      * UnLink Command
-     * This commands unlinks the current working directory to ownclt commands.
+     * This commands unlinks the current working directory to myclt commands.
      * @param args - Args received!
      * @param log - Log Functions
      */
     unlink: {
-        default({ ownclt, command, args: [namespace], log }) {
+        default({ myclt, command, args: [namespace], log }) {
             // check if namespace exists
             if (!namespace) {
                 return log.errorAndExit(
-                    `${command}: requires the "namespace" of the ownclt command.`
+                    `${command}: requires the "namespace" of the myclt command.`
                 );
             }
 
@@ -246,7 +243,7 @@ export default defineCommands({
             if (namespace === "clt")
                 return log.warningAndExit(`Namespace: "${namespace}" cannot be unlinked.`);
 
-            const db = ownclt().db;
+            const db = myclt().db;
 
             // check if namespace exists
             if (!db.has(`commands.${namespace}`)) {
@@ -264,7 +261,7 @@ export default defineCommands({
         /**
          * `clt /unlink/folder`
          */
-        folder({ ownclt, state, self, command, args: [folder], log }) {
+        folder({ myclt, state, self, command, args: [folder], log }) {
             // Exit if no folder
             if (!folder) return log.errorAndExit(`${command}: Folder is required!`);
 
@@ -275,9 +272,9 @@ export default defineCommands({
             self("link", folder);
 
             // Get mapFile
-            const map: OwnCltMapFile = state.get("mapFile");
+            const map: MyCltMapFile = state.get("mapFile");
 
-            const filter = ownclt()
+            const filter = myclt()
                 .db.path("commands")
                 .pickBy((d: any) => {
                     return d.file === map.file;

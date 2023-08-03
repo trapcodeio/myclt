@@ -1,16 +1,16 @@
 import * as loggers from "../functions/Loggers";
-import OwnCltState from "../classes/OwnCltState";
-import OwnClt from "../classes/OwnClt";
+import MyCltState from "../classes/MyCltState";
 import ObjectCollection from "object-collection";
+import MyClt from "../classes/MyClt";
 
-export interface OwnCltConfig {
+export interface MyCltConfig {
     command: string;
     args: string[];
     caller: string;
 }
 
-export type OwnCltLoggers = typeof loggers;
-export type OwnCltStore = {
+export type MyCltLoggers = typeof loggers;
+export type MyCltStore = {
     set(key: string | Record<string, any>, value?: any): void;
     get<T = any>(key: string, def?: T): T;
     has(key: string): boolean;
@@ -20,31 +20,31 @@ export type OwnCltStore = {
     collection<T extends Record<string, any>>(): ObjectCollection<T>;
 };
 
-export type OwnCltCommandFnContext = {
+export type MyCltCommandFnContext = {
     args: string[];
     command: string;
     subCommands: string[];
-    log: OwnCltLoggers;
+    log: MyCltLoggers;
     paths: { cwd: string; cwdResolve: (path?: string) => string };
-    state: OwnCltState;
+    state: MyCltState;
     self: (name: string, args?: any | any[]) => any;
     fromSelf: boolean;
-    ownclt: () => OwnClt;
-    store: OwnCltStore;
+    myclt: () => MyClt;
+    store: MyCltStore;
 };
 
-export type OwnCltMapFile = {
+export type MyCltMapFile = {
     namespace: string;
     file: string;
     commands: Record<string, { desc: string }>;
 };
 
-export type OwnCltDbCommandData = OwnCltMapFile & {
+export type MyCltDbCommandData = MyCltMapFile & {
     mapFile?: string;
 };
 
-export type OwnCltCommandFn = (ctx: OwnCltCommandFnContext) => any;
-export type OwnCltCommandsObject = { [key: string]: OwnCltCommandFn | OwnCltCommandsObject };
+export type MyCltCommandFn = (ctx: MyCltCommandFnContext) => any;
+export type MyCltCommandsObject = { [key: string]: MyCltCommandFn | MyCltCommandsObject };
 
 export function As<T>(data: T) {
     return data;

@@ -1,2 +1,2 @@
-# Chmod ownclt executable file
-chmod +x ./bin/ownclt.js
+# Chmod myclt executable file
+chmod +x ./bin/myclt.js

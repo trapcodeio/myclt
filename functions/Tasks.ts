@@ -1,4 +1,4 @@
-import OwnClt from "../classes/OwnClt";
+import MyClt from "../classes/MyClt";
 import * as fs from "fs";
 import * as Path from "path";
 import jsonpointer from "jsonpointer";
@@ -7,35 +7,35 @@ import * as log from "./Loggers";
 import FactoryDb from "../factory/db";
 import {
     As,
-    OwnCltCommandFn,
-    OwnCltCommandFnContext,
-    OwnCltCommandsObject,
-    OwnCltMapFile,
-    OwnCltStore
+    MyCltCommandFn,
+    MyCltCommandFnContext,
+    MyCltCommandsObject,
+    MyCltMapFile,
+    MyCltStore
 } from "../types";
-import OwnCltState from "../classes/OwnCltState";
+import MyCltState from "../classes/MyCltState";
 import { Obj } from "object-collection/exports";
 import ObjectCollection from "object-collection";
 
 /**
  * Loads the content of the database file as a collection.
- * @param self - Ownclt Instance
+ * @param self - MyClt Instance
  * @param path - Custom Path to db.json
  */
-export function loadDbToCollection(self: OwnClt, path?: string) {
-    const cltDatabase = path ? path : self.dotOwnCltPath("db.json");
+export function loadDbToCollection(self: MyClt, path?: string) {
+    const cltDatabase = path ? path : self.dotMyCltPath("db.json");
     // Load db.json
     self.db.replaceData(require(cltDatabase));
 }
 
 /**
- * This functions checks for .ownclt folder and database files.
+ * This functions checks for .myclt folder and database files.
  * if they don't exists, it tries creating them.
- * @param self - Ownclt Instance
+ * @param self - MyClt Instance
  */
-export function installedOrInstall(self: OwnClt) {
-    const cltFolder = self.dotOwnCltPath();
-    const cltDatabase = self.dotOwnCltPath("db.json");
+export function installedOrInstall(self: MyClt) {
+    const cltFolder = self.dotMyCltPath();
+    const cltDatabase = self.dotMyCltPath("db.json");
 
     // Checkers
     const hasCltDb = fs.existsSync(cltDatabase);
@@ -55,7 +55,7 @@ export function installedOrInstall(self: OwnClt) {
         try {
             fs.mkdirSync(cltFolder);
         } catch (e) {
-            return log.errorAndExit(`Failed to create {.ownclt} folder in ${cltFolder}`, e);
+            return log.errorAndExit(`Failed to create {.myclt} folder in ${cltFolder}`, e);
         }
     }
 
@@ -80,7 +80,7 @@ export function installedOrInstall(self: OwnClt) {
  * Process Cli Query
  * @param self
  */
-export function processCliQuery(self: OwnClt) {
+export function processCliQuery(self: MyClt) {
     const { command, args } = self.config;
     const commands = self.db.path("commands");
 
@@ -88,7 +88,7 @@ export function processCliQuery(self: OwnClt) {
     // E.g `clt/link/this` where `clt` is namespace
     // while ['link', 'this'] are subCommands
     const [namespace, ...subCommands] = command.split("/");
-    const commandMap = commands.get<OwnCltMapFile>(namespace);
+    const commandMap = commands.get<MyCltMapFile>(namespace);
 
     if (!commandMap) {
         return log.warningAndExit(`Command "${command}" does not exists.`);
@@ -110,13 +110,13 @@ export function processCliQuery(self: OwnClt) {
 
 /**
  * Loads the Handler file of a command
- * @param ownClt
+ * @param myclt
  */
-export async function loadCommandHandler(ownClt: OwnClt) {
+export async function loadCommandHandler(myclt: MyClt) {
     // Throw error if instance has no query
-    if (!ownClt.query) {
+    if (!myclt.query) {
         throw new Error(
-            `No query in ownclt instance, call processCliQuery() first before loadCommandHandler()`
+            `No query in myclt instance, call processCliQuery() first before loadCommandHandler()`
         );
     }
 
@@ -124,9 +124,9 @@ export async function loadCommandHandler(ownClt: OwnClt) {
     const cwd = process.cwd();
 
     // Destruct the needful
-    const { commandHandler, subCommands, command } = ownClt.query;
+    const { commandHandler, subCommands, command } = myclt.query;
 
-    let Commands: OwnCltCommandsObject = {};
+    let Commands: MyCltCommandsObject = {};
 
     try {
         // check if commandHandler is a ts file
@@ -139,7 +139,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
 
         // check if it is default export
         if (Commands.default) {
-            Commands = Commands.default as OwnCltCommandsObject;
+            Commands = Commands.default as MyCltCommandsObject;
         }
     } catch (err: any) {
         return log.errorAndExit(err.message, err.stack);
@@ -197,11 +197,11 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             return log.errorAndExit(`command "${command}" is not callable!`);
 
         // Make Command Handler Context Data
-        const data: OwnCltCommandFnContext = {
-            args: ownClt.query.args,
-            command: ownClt.query.command,
-            subCommands: ownClt.query.subCommands,
-            state: new OwnCltState(),
+        const data: MyCltCommandFnContext = {
+            args: myclt.query.args,
+            command: myclt.query.command,
+            subCommands: myclt.query.subCommands,
+            state: new MyCltState(),
             log,
             paths: {
                 cwd,
@@ -211,8 +211,8 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             },
             self: undefined as any,
             fromSelf: false,
-            ownclt: () => ownClt,
-            store: makeStoreObject(ownClt)
+            myclt: () => myclt,
+            store: makeStoreObject(myclt)
         };
 
         // Setup self-function.
@@ -253,7 +253,7 @@ export async function loadCommandHandler(ownClt: OwnClt) {
             );
         };
 
-        return (mainSubCommand as OwnCltCommandFn)(data);
+        return (mainSubCommand as MyCltCommandFn)(data);
     }
 }
 
@@ -262,12 +262,12 @@ export async function loadCommandHandler(ownClt: OwnClt) {
  * This function is used to make a store object
  * To prevent the user from accessing the db directly
  * It also ties the current namespace to the store object
- * @param ownClt
+ * @param myclt
  */
-export function makeStoreObject(ownClt: OwnClt) {
-    const obj = ownClt.db.path("store").path(ownClt.query!.namespace, {});
+export function makeStoreObject(myclt: MyClt) {
+    const obj = myclt.db.path("store").path(myclt.query!.namespace, {});
 
-    return As<OwnCltStore>({
+    return As<MyCltStore>({
         get: (key, def) => obj.get<any>(key, def),
         set: (key, value) => {
             // set value
@@ -285,7 +285,7 @@ export function makeStoreObject(ownClt: OwnClt) {
             for (const key of keys) obj.unset(key);
         },
         commitChanges() {
-            ownClt.db.save();
+            myclt.db.save();
         },
         /**
          * We are using a collection, because we don't want any inheritance with store.

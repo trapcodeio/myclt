@@ -1,25 +1,25 @@
-# OwnClt
+# MyClt
 
-OwnCLT -
-Own command line tool is cli framework for creating custom commands with support to link commands from git repositories.
+MyClt -
+My command line tool is cli framework for creating custom commands with support to link commands from git repositories.
 
 
 ## Installation
 Note: This package is best used if installed globally.
 
 ```bash
-npm install -g ownclt
+npm install -g myclt
 # OR
-yarn global add ownclt
+yarn global add myclt
 ```
 
 Or using npx: (This is not recommended as it will be slow to run commands and does not support the `clt` alias)
 
 ```bash
-npx ownclt <command>
+npx myclt <command>
 
 # For example:
-npx ownclt /list
+npx myclt /list
 ```
 
 
@@ -31,13 +31,13 @@ To create a command two files are needed.
 
 
 ### Typescript
-Create a new project and install the `ownclt` package.
+Create a new project and install the `myclt` package.
 The package is needed for type definitions but not required for the command to work.
 
 Create a commands file @ `maths/index.ts` with the following content:
 
 ```ts
-import {defineCommands} from "ownclt/functions/Helpers";
+import {defineCommands} from "myclt/functions/Helpers";
 
 export default defineCommands({
     add({log, args}) {
@@ -51,7 +51,7 @@ export default defineCommands({
 });
 ```
 
-Create a map file @ `maths/ownclt.map.json` with the following content:
+Create a map file @ `maths/myclt.map.json` with the following content:
 
 ```json
 {
@@ -68,7 +68,7 @@ Create a map file @ `maths/ownclt.map.json` with the following content:
 }
 ```
 
-Run the command below to link the command to ownclt.
+Run the command below to link the command to myclt.
 
 ```bash
 clt /link maths

@@ -1,15 +1,15 @@
 import { defineCommands } from "../../functions/Helpers";
-import { OwnCltDbCommandData } from "../../types";
+import { MyCltDbCommandData } from "../../types";
 import chalk from "chalk";
-import type OwnClt from "../../classes/OwnClt";
+import type MyClt from "../../classes/MyClt";
 
 export default defineCommands({
     /**
      * Default Command for:
      * `clt /list`
      */
-    default({ ownclt, log, args: [search] }) {
-        const commands = getCommands(ownclt());
+    default({ myclt, log, args: [search] }) {
+        const commands = getCommands(myclt());
 
         log.emptyLine();
 
@@ -87,12 +87,12 @@ export default defineCommands({
 });
 
 /**
- * Get Command's Object from ownclt db
- * @param ownclt
+ * Get Command's Object from myclt db
+ * @param myclt
  */
-function getCommands(ownclt: OwnClt) {
+function getCommands(myclt: MyClt) {
     const commands: Record<string, { namespace: string; desc: string }> = {};
-    const dbCommands = ownclt.db.get<Record<string, OwnCltDbCommandData>>("commands");
+    const dbCommands = myclt.db.get<Record<string, MyCltDbCommandData>>("commands");
 
     for (const [namespace, map] of Object.entries(dbCommands)) {
         // loop through each command
