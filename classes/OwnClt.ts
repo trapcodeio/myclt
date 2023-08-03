@@ -8,6 +8,7 @@ import Path from "path";
 import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/Tasks";
 import OwnCltDatabase from "./OwnCltDatabase";
 import { Obj } from "object-collection/exports";
+import * as os from "os";
 
 class OwnClt {
     // started
@@ -96,7 +97,7 @@ class OwnClt {
      * @param path
      */
     dotOwnCltPath(path?: string) {
-        return this.ownCltPath(".ownclt/" + path);
+        return Path.resolve(os.homedir() + "/.ownclt/" + (path || ""));
     }
 
     getCache<T = any>(key: string, def?: T): T {
