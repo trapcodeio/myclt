@@ -1,4 +1,4 @@
-import { defineCommands } from "../../functions/Helpers";
+import { defineCommands } from "../../functions/helpers";
 import { MyCltDbCommandData } from "../../types";
 import chalk from "chalk";
 import type MyClt from "../../classes/MyClt";

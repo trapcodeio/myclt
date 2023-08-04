@@ -1,7 +1,8 @@
 # MyClt
 
 MyClt -
-My command line tool is cli framework for creating custom commands with support to link commands from git repositories.
+My command line tool is a cli framework
+for creating custom/reusable commands
 
 
 ## Installation
@@ -24,17 +25,17 @@ npx myclt /list
 
 
 ## Creating a command.
-To create a command two files are needed.
+To create a command, two files are needed.
 
-1. The command file. (js or ts) - The file where commands are defined.
-2. The command map file. (json) - The file where the command is mapped to the command file.
+1. The Command file (js or ts): The file where commands are defined.
+2. The Map file (json): The file where the command is mapped to the command file.
 
 
 ### Typescript
 Create a new project and install the `myclt` package.
 The package is needed for type definitions but not required for the command to work.
 
-Create a commands file @ `maths/index.ts` with the following content:
+Create a command file @ `maths/index.ts` with the following content:
 
 ```ts
 import {defineCommands} from "myclt/functions/Helpers";

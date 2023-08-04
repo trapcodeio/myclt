@@ -1,9 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import type { MyCltMapFile } from "../types";
-import { defineCommands } from "../functions/Helpers";
+import { defineCommands } from "../functions/helpers";
 import list from "./clt/list";
 import { execSync } from "child_process";
+import { deleteDirectory } from "../functions/inbuilt";
 
 export default defineCommands({
     version({ myclt, log }) {
@@ -146,7 +147,7 @@ export default defineCommands({
                 if (fs.readdirSync(gitFolder).length > 0) {
                     if (isUpdating) {
                         // delete the folder
-                        fs.rmSync(gitFolder, { recursive: true });
+                        deleteDirectory(gitFolder)
                     } else {
                         isEmpty = false;
                     }
@@ -195,10 +196,14 @@ export default defineCommands({
                 const mapFileFolder = path.resolve(gitFolder, folder);
                 const mapFile = path.resolve(mapFileFolder, "myclt.map.json");
 
-                if (!fs.existsSync(mapFile))
+                if (!fs.existsSync(mapFile)) {
+                    // delete the folder
+                    deleteDirectory(gitFolder)
+
                     return log.errorAndExit(
                         `${command}: Map file not found in repo path: "${repo + "/" + folder}"`
                     );
+                }
 
                 // call link command
                 self("link", [mapFileFolder, as]);

@@ -1,4 +1,4 @@
-import { defineCommands } from "../../functions/Helpers";
+import { defineCommands } from "../../functions/helpers";
 
 export default defineCommands({
     world() {

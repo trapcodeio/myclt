@@ -1,4 +1,4 @@
-import { infoAndExit } from "./functions/Loggers";
+import { infoAndExit } from "./functions/loggers";
 import MyClt from "./classes/MyClt";
 
 async function Main() {

@@ -5,7 +5,7 @@
  */
 import { MyCltConfig } from "../types";
 import Path from "path";
-import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/Tasks";
+import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/tasks";
 import MyCltDatabase from "./MyCltDatabase";
 import { Obj } from "object-collection/exports";
 import * as os from "os";

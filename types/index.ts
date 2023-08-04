@@ -1,4 +1,4 @@
-import * as loggers from "../functions/Loggers";
+import * as loggers from "../functions/loggers";
 import MyCltState from "../classes/MyCltState";
 import ObjectCollection from "object-collection";
 import MyClt from "../classes/MyClt";

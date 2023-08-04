@@ -2,7 +2,7 @@ import MyClt from "../classes/MyClt";
 import * as fs from "fs";
 import * as Path from "path";
 import jsonpointer from "jsonpointer";
-import * as log from "./Loggers";
+import * as log from "./loggers";
 
 import FactoryDb from "../factory/db";
 import {
