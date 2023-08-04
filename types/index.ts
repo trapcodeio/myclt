@@ -36,7 +36,12 @@ export type MyCltCommandFnContext = {
 export type MyCltMapFile = {
     namespace: string;
     file: string;
-    commands: Record<string, { desc: string }>;
+    commands: Record<string, {
+        desc: string,
+        args?: {
+            [key: string]:  `optional: ${string}` | string
+        }
+    }>;
 };
 
 export type MyCltDbCommandData = MyCltMapFile & {
