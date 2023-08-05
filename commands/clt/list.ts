@@ -1,5 +1,5 @@
 import { defineCommands } from "../../functions/helpers";
-import { MyCltDbCommandData, MyCltMapFileCommand } from "../../types";
+import { MyCltDbCommandData, MyCltMapFileCommand, MyCltMapFileCommandArgs } from "../../types";
 import chalk from "chalk";
 import type MyClt from "../../classes/MyClt";
 
@@ -109,9 +109,16 @@ function getCommands(myclt: MyClt) {
 }
 
 
-function getArgsString(args: Record<string, string>){
-    return Object.entries(args).map(([key, value]) => {
-        if (value.startsWith("optional: ")) return `[${key}]`;
-        return `<${key}>`;
-    }).join(" ");
+function getArgsString(args: MyCltMapFileCommandArgs){
+    if(Array.isArray(args)) {
+        return args.map(arg => {
+            if (arg.endsWith("?")) return `[${arg.slice(0, -1)}]`;
+            return `<${arg}>`;
+        }).join(" ");
+    } else {
+        return Object.entries(args).map(([key]) => {
+            if (key.endsWith("?")) return `[${key.slice(0, -1)}]`;
+            return `<${key}>`;
+        }).join(" ");
+    }
 }

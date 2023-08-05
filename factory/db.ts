@@ -39,7 +39,7 @@ export default () => ({
                 list: {
                     desc: "List all declared commands using data stored in linked map files",
                     args: {
-                        search: "optional: Query to search for"
+                        "search?": "Query to search for"
                     }
                 }
             }
