@@ -1,5 +1,5 @@
 import { defineCommands } from "../../functions/helpers";
-import { MyCltDbCommandData } from "../../types";
+import { MyCltDbCommandData, MyCltMapFileCommand } from "../../types";
 import chalk from "chalk";
 import type MyClt from "../../classes/MyClt";
 
@@ -62,7 +62,7 @@ export default defineCommands({
             console.log(
                 `${chalk.yellowBright(key)}${" ".repeat(
                     longestKeyLength - key.length
-                )} ${pipe} ${chalk.cyan(data.desc)}`
+                )} ${pipe} ${chalk.cyan(data.desc)} ${data.args ? chalk.dim('-- ' + getArgsString(data.args)) : ""}`.trim()
             );
 
             results++;
@@ -91,18 +91,27 @@ export default defineCommands({
  * @param myclt
  */
 function getCommands(myclt: MyClt) {
-    const commands: Record<string, { namespace: string; desc: string }> = {};
+    const commands: Record<string, MyCltMapFileCommand & { namespace: string }> = {};
     const dbCommands = myclt.db.get<Record<string, MyCltDbCommandData>>("commands");
 
     for (const [namespace, map] of Object.entries(dbCommands)) {
         // loop through each command
-        for (const [command, { desc }] of Object.entries(map.commands)) {
+        for (const [command, { desc, args }] of Object.entries(map.commands)) {
             commands[namespace === "clt" ? `/${command}` : `${namespace}/${command}`] = {
                 desc,
-                namespace
+                namespace,
+                args
             };
         }
     }
 
     return commands;
+}
+
+
+function getArgsString(args: Record<string, string>){
+    return Object.entries(args).map(([key, value]) => {
+        if (value.startsWith("optional: ")) return `[${key}]`;
+        return `<${key}>`;
+    }).join(" ");
 }

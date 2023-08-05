@@ -33,15 +33,16 @@ export type MyCltCommandFnContext = {
     store: MyCltStore;
 };
 
+export type MyCltMapFileCommand = {
+    desc: string,
+    args?: {
+        [key: string]:  `optional: ${string}` | string
+    }
+}
 export type MyCltMapFile = {
     namespace: string;
     file: string;
-    commands: Record<string, {
-        desc: string,
-        args?: {
-            [key: string]:  `optional: ${string}` | string
-        }
-    }>;
+    commands: Record<string, MyCltMapFileCommand>;
 };
 
 export type MyCltDbCommandData = MyCltMapFile & {
