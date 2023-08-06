@@ -72,7 +72,7 @@ Create a command file @ `maths/index.js` with the following content:
 ```js
 const { defineCommands } = require("myclt/functions/helpers");
 
-export default defineCommands({
+module.exports = defineCommands({
     add({ log, args }) {
         const [x, y] = args.map(Number);
         log.info(`${x} + ${y} = ${x + y}`);
@@ -295,5 +295,3 @@ function action({ store }) {
     store.collection().all(); // get all items
 }
 ```
-
-## Clt Commands
