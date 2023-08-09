@@ -140,6 +140,7 @@ This function is passed an object with the following properties:
 | [`fromSelf`](#fromSelf)       | `boolean`  | A boolean that is true if the command was run from the same namespace.                             |
 | [`myclt`](#myclt)             | `function` | A function that returns the myclt instance.                                                        |
 | [`store`](#store)             | `object`   | A store object that contains methods for storing and retrieving persisted data.                    |
+| [`exec`](#store)              | `function` | A function for running command or multiple commands                                                |
 
 
 ### `args`
@@ -293,5 +294,13 @@ function action({ store }) {
     store.clear();
     store.commitChanges(); // commit changes to disk
     store.collection().all(); // get all items
+}
+```
+
+### `exec`
+This function is just nodes `child_process.execSync` function with `stdio: "inherit"` option.
+```ts
+function action({ exec }) {
+    exec("npm install");
 }
 ```
