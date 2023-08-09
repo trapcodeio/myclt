@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { error, info } from "./loggers";
-import { execSync, ExecOptionsWithBufferEncoding } from "node:child_process";
+import { execSync } from "node:child_process";
+import { ExecSyncOptions } from "child_process";
 
 /**
  * Delete function
@@ -19,7 +20,7 @@ export function deleteDirectory(dir: string) {
  * Execute a command just like you would in terminal
  * or in a bash script.
  */
-export function myclt_exec(command: string | string[], options?: ExecOptionsWithBufferEncoding) {
+export function myclt_exec(command: string | string[], options?: ExecSyncOptions) {
     if (typeof command === "string") {
         try {
             execSync(command, {

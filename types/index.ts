@@ -3,6 +3,7 @@ import MyCltState from "../classes/MyCltState";
 import ObjectCollection from "object-collection";
 import MyClt from "../classes/MyClt";
 import { myclt_exec } from "../functions/inbuilt";
+import { execSync } from "child_process";
 
 export interface MyCltConfig {
     command: string;
