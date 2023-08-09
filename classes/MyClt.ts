@@ -5,7 +5,7 @@
  */
 import { MyCltConfig } from "../types";
 import Path from "path";
-import { installedOrInstall, loadCommandHandler, processCliQuery } from "../functions/tasks";
+import { myclt_installedOrInstall, myclt_loadCommandHandler, myclt_processCliQuery } from "../functions/tasks";
 import MyCltDatabase from "./MyCltDatabase";
 import { Obj } from "object-collection/exports";
 import * as os from "os";
@@ -66,17 +66,17 @@ class MyClt {
         /**
          * Check if myclt has been installed, if Yes, skip the installation process.
          */
-        installedOrInstall(this);
+        myclt_installedOrInstall(this);
 
         /**
          * Process command
          */
-        processCliQuery(this);
+        myclt_processCliQuery(this);
 
         /**
          * Load Processed Command
          */
-        await loadCommandHandler(this);
+        await myclt_loadCommandHandler(this);
 
         return this;
     }

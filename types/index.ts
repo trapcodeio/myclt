@@ -2,6 +2,7 @@ import * as loggers from "../functions/loggers";
 import MyCltState from "../classes/MyCltState";
 import ObjectCollection from "object-collection";
 import MyClt from "../classes/MyClt";
+import { myclt_exec } from "../functions/inbuilt";
 
 export interface MyCltConfig {
     command: string;
@@ -31,6 +32,7 @@ export type MyCltCommandFnContext = {
     fromSelf: boolean;
     myclt: () => MyClt;
     store: MyCltStore;
+    exec: typeof myclt_exec
 };
 
 type MyCltMapFileCommandArgKey = string | `${string}?`;

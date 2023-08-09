@@ -16,13 +16,14 @@ import {
 import MyCltState from "../classes/MyCltState";
 import { Obj } from "object-collection/exports";
 import ObjectCollection from "object-collection";
+import { myclt_exec } from "./inbuilt";
 
 /**
  * Loads the content of the database file as a collection.
  * @param self - MyClt Instance
  * @param path - Custom Path to db.json
  */
-export function loadDbToCollection(self: MyClt, path?: string) {
+export function myclt_loadDbToCollection(self: MyClt, path?: string) {
     const cltDatabase = path ? path : self.dotMyCltPath("db.json");
     // Load db.json
     self.db.replaceData(require(cltDatabase));
@@ -33,7 +34,7 @@ export function loadDbToCollection(self: MyClt, path?: string) {
  * if they don't exists, it tries creating them.
  * @param self - MyClt Instance
  */
-export function installedOrInstall(self: MyClt) {
+export function myclt_installedOrInstall(self: MyClt) {
     const cltFolder = self.dotMyCltPath();
     const cltDatabase = self.dotMyCltPath("db.json");
 
@@ -44,7 +45,7 @@ export function installedOrInstall(self: MyClt) {
     // If has both folder and Db return
     if (hasCltFolder && hasCltDb) {
         // Load db.json
-        loadDbToCollection(self, cltDatabase);
+        myclt_loadDbToCollection(self, cltDatabase);
 
         // Stop and return true.
         return true;
@@ -70,7 +71,7 @@ export function installedOrInstall(self: MyClt) {
     }
 
     // Load db.json
-    loadDbToCollection(self, cltDatabase);
+    myclt_loadDbToCollection(self, cltDatabase);
 
     // Stop and return true.
     return true;
@@ -80,7 +81,7 @@ export function installedOrInstall(self: MyClt) {
  * Process Cli Query
  * @param self
  */
-export function processCliQuery(self: MyClt) {
+export function myclt_processCliQuery(self: MyClt) {
     const { command, args } = self.config;
     const commands = self.db.path("commands");
 
@@ -112,7 +113,7 @@ export function processCliQuery(self: MyClt) {
  * Loads the Handler file of a command
  * @param myclt
  */
-export async function loadCommandHandler(myclt: MyClt) {
+export async function myclt_loadCommandHandler(myclt: MyClt) {
     // Throw error if instance has no query
     if (!myclt.query) {
         throw new Error(
@@ -212,7 +213,8 @@ export async function loadCommandHandler(myclt: MyClt) {
             self: undefined as any,
             fromSelf: false,
             myclt: () => myclt,
-            store: makeStoreObject(myclt)
+            store: myclt_makeStoreObject(myclt),
+            exec: myclt_exec
         };
 
         // Setup self-function.
@@ -264,7 +266,7 @@ export async function loadCommandHandler(myclt: MyClt) {
  * It also ties the current namespace to the store object
  * @param myclt
  */
-export function makeStoreObject(myclt: MyClt) {
+export function myclt_makeStoreObject(myclt: MyClt) {
     const obj = myclt.db.path("store").path(myclt.query!.namespace, {});
 
     return As<MyCltStore>({

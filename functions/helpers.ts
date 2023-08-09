@@ -1,4 +1,4 @@
-import { MyCltCommandFn, MyCltCommandsObject } from "../types";
+import type { MyCltCommandFn, MyCltCommandsObject } from "../types";
 
 export function defineCommands(commands: MyCltCommandsObject) {
     return commands;
